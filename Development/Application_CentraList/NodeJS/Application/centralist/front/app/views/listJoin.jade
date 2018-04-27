@@ -1,0 +1,80 @@
+div.container.listing-list(ng-show="list")
+  div.row
+    div.col-sm-offset-2.col-sm-8.col-md-offset-3.col-md-6.well
+      h1
+        div {{ list.name }}
+          div.btn-group.pull-right(ng-show="list.isModerator || auth.user.isAdmin")
+            a.btn.btn-default(href="#/lists/{{list.id}}") Liste
+
+      ul.list-inline
+        li
+          span.label(class="label-{{ list.$type.bsType }}", tooltip="{{ list.$type.tooltip }}") {{ list.$type.label }}
+        li(ng-show="list.isLinked")
+          span.label.label-success(tooltip="Vous êtes inscrits à cette liste") Inscrit
+        li(ng-show="list.isModerator")
+          span.label.label-success(tooltip="Vous êtes modérateur") Modérateur
+        li(ng-show="list.isOffline")
+          span.label.label-default(tooltip="Accessible et modifiable hors-connexion") Hors Connexion
+        li(ng-show="!list.isModerator && auth.user.isAdmin")
+          span.label.label-danger(tooltip="Vous n'êtes pas modérateur") Admin
+        li.list-desc {{ list.desc }}
+          span(ng-show="list.isModerator || auth.user.isAdmin || list.$type.publicContent") , {{links.length}} inscrits
+  div.clearfix
+  div.row(ng-hide="list.isLinked")
+    alert(ng-repeat="alert in alerts", type="alert.type", ng-animate="'listing-alert'") {{ alert.msg }}
+    div.col-sm-offset-2.col-sm-8.col-md-offset-3.col-md-6.well(ng-show="list.$type.usersCanJoin")
+      form.form-horizontal.listing-form(name="form", ng-submit="submit()")
+        //- Login
+        div.form-group(ng-class="check('user_login') ? 'has-error' : ''")
+          label.col-sm-3.control-label(for="user_login") Login
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_login" , name="user_login", placeholder="Login", ng-readonly="newLink.userId", ng-model="newLink.data.user_login")
+        //- Prénom
+        div.form-group(ng-class="check('user_firstName') ? 'has-error' : ''")
+          label.col-sm-3.control-label(for="user_firstName") Prénom
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_firstName" , name="user_firstName", placeholder="Prénom", ng-readonly="newLink.userId", ng-model="newLink.data.user_firstName", required)
+        //- Nom
+        div.form-group(ng-class="check('user_lastName') ? 'has-error' : ''")
+          label.col-sm-3.control-label(for="user_lastName") Nom
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_lastName" , name="user_lastName", placeholder="Nom", ng-readonly="newLink.userId", ng-model="newLink.data.user_lastName", required)
+        //- E-mail
+        div.form-group(ng-class="check('user_mail') ? 'has-error' : ''", ng-show="list.userFields.mail")
+          label.col-sm-3.control-label(for="user_mail") Mail
+          div.col-sm-9
+            input.form-control.input-sm(type="email", id="user_mail", name="user_mail", placeholder="E-mail", ng-model="newLink.data.user_mail")
+        //- Tèl
+        div.form-group(ng-class="check('user_tel') ? 'has-error' : ''",  ng-show="list.userFields.tel")
+          label.col-sm-3.control-label(for="user_tel") Tèl
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_tel" ,name="user_tel" ,placeholder="__ __ __ __ __", ui-mask="99 99 99 99 99" , ng-model="newLink.data.user_tel" ,ui-mask="99 99 99 99 99")
+        hr
+        //- {{ field.label }}
+        div.form-group(ng-class="check2('#data_'+field.name) ? 'has-error' : ''", ng-repeat="field in list.fields")
+          label.col-sm-3.control-label(for="data_{{ field.name }}") {{ field.label }}
+          div.col-sm-9(ng-if="field.type=='text'")
+            input.form-control.input-sm(type="text", id="data_{{ field.name }}", placeholder="{{ field.label }}", ng-model="newLink.data[field.name]" ,ng-required="field.required")
+          div.col-sm-9.form-control-static(ng-if="field.type=='bool'")
+            label
+              input(type="radio", name="data_{{ field.name }}", ng-model="newLink.data[field.name]", ng-required="field.required", value="Oui")
+              = ' Oui'
+            = ' '
+            label
+              input(type="radio", name="data_{{ field.name }}", ng-model="newLink.data[field.name]", ng-required="field.required", value="Non")
+              = ' Non'
+          div.col-sm-9(ng-if="field.type=='select'")
+            select.form-control.input-sm(ng-options="c for c in field.options", ng-model="newLink.data[field.name]", ng-required="field.required")
+        //- Buttons
+        div.form-group
+          div.col-sm-12.text-right
+            button.btn.btn-danger.pull-left(type="button",ng-click="delete()" ,ng-show="newLink._id")
+              span.glyphicon.glyphicon-trash
+            = ' '
+            button.btn.btn-success.listing-width-1(type="submit",ng-disabled="form.$invalid") {{ newLink._id ? 'Modifier' : 'Ajouter' }}
+            = ' '
+            button.btn.btn-warning(type="button", ng-click="reset()") Annuler
+  div.row(ng-show="list.isLinked")
+    div.col-sm-offset-2.col-sm-8.col-md-offset-3.col-md-6.well
+      p(ng-hide="list.type == 3") Vous êtes déjà présent dans cette liste
+      p(ng-show="list.type == 3") Merci d'avoir participé à ce sondage

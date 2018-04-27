@@ -1,0 +1,32 @@
+div.container
+  div.row
+    form.well.form-horizontal.col-sm-offset-2.col-sm-8.col-md-offset-3.col-md-6.listing-white-block(role="form", ng-submit="submit($event)", name="form", novalidate)
+      h1 Informations utilisateur
+      hr
+      alert(ng-repeat="alert in alerts", type="alert.type", ng-animate="'listing-alert'") {{ alert.msg }}
+      //- Login
+      div.form-group
+        label.col-sm-4.control-label Login
+        div.col-sm-8
+          p.form-control-static {{ user.login }}
+      //- Prénom
+      div.form-group
+        label.col-sm-4.control-label Prénom
+        div.col-sm-8
+          p.form-control-static {{ user.firstName }}
+      //- Nom
+      div.form-group
+        label.col-sm-4.control-label Nom
+        div.col-sm-8
+          p.form-control-static {{ user.lastName }}
+      //- E-mail
+      div.form-group(ng-class="check('user_mail') ? 'has-error' : ''")
+        label.col-sm-4.control-label(for="user_mail") E-mail
+        div.col-sm-8
+          p.form-control-static {{ user.mail }}
+      //- Téléphone
+      div.form-group(ng-class="check('user_tel') ? 'has-error' : ''")
+        label.col-sm-4.control-label(for="user_tel") Téléphone
+        div.col-sm-8
+          p.form-control-static {{ user.tel }}
+

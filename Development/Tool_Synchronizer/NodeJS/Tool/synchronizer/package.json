@@ -1,0 +1,29 @@
+{
+	"name"              : "synchronizer_centralist",
+	"author"            : {
+		"name"	 : "Emmanuel ZIDEL-CAUFFET",
+		"pseudo" : "Zidmann",
+		"email"	 : "emmanuel.zidel@gmail.com"
+	},
+	"description"       : "Program designed to be scheduled to synchronize information between  CentraList application and the project Zer0 API providing student information",
+	"version"           : "1.0.0",
+	"private"           : false,
+	"repository"	    : {
+		"type"	: "git",
+		"url"	: "https://bitbucket.org/zidmann/"
+	},
+	"main"              : "./server/index.js",
+	"scripts"           : { 
+		"start" : "./bin/synchronize.sh",
+		"stop" : "echo 1>/dev/null"
+	},
+	"license"           : "GNU v3",
+	"readmeFilename"    : "README.md",
+	"engines": {
+		"node": ">0.10.0"
+	},
+	"dependencies": {
+		"mongodb"    : "~3.0.6",
+		"underscore" : "~1.8.3"
+	}
+}

@@ -1,0 +1,5 @@
+All/DEB/*deb
+Applications/*.deb
+Applications/*/home/
+Tools/*deb
+Tools/*/home/

@@ -1,0 +1,57 @@
+{
+	"name"		: "application_centralist_front",
+	"authors"	:[{"name"   : "Emmanuel ZIDEL-CAUFFET",
+			   "pseudo" : "Zidmann",
+			   "email"  : "emmanuel.zidel@gmail.com"},
+			  {"name"   : "Hugo LEHMANN",
+			   "pseudo" : "shogi31",
+			   "email"  : "shogi31@gmail.com" }],
+	"description"	: "Part of the CentraList application which generates list of students",
+	"version"	: "1.1.0",
+	"private"	: false,
+	"repository"	    : {
+		"type"	: "git",
+		"url"	: "https://bitbucket.org/zidmann/"
+	},
+	"scripts"	: {
+		"install"	: "node_modules/.bin/bower i",
+		"start"		: "node_modules/.bin/brunch watch --server",
+		"test"		: "node_modules/.bin/karma start test/karma.conf.js"
+	},
+	"license"		: "GNU v3",
+	"readmeFilename"	: "README.md",
+	"dependencies": {
+		"bower"				: "~1.3.12",
+		"brunch"                     : "~1.7.20",
+
+		"coffee-script"              : "~1.6.3",
+		"coffee-script-brunch"       : "~1.7.3",
+		"javascript-brunch"          : "~1.7.1",
+
+		"css-brunch"                 : "~1.7.0",
+		"less-brunch"                : "~1.7.2",
+		"stylus-brunch"              : "~1.7.0",
+
+		"jade"                       : "~0.33.0",
+		"jade-angularjs-brunch"      : "~0.0.6",
+
+		"auto-reload-brunch"         : "~1.7.8",
+
+		"clean-css-brunch"           : "~1.7.2",
+
+		"jasmine-core"               : "~2.3.4",
+		"requirejs"                  : "~2.1.17",
+		"uglify-js-brunch"           : "~1.7.8",
+
+		"karma-chrome-launcher"      : "~0.1.12",
+		"karma-coffee-preprocessor"  : "~0.0.4",
+		"karma-firefox-launcher"     : "~0.1.6",
+		"karma-html2js-preprocessor" : "~0.1.0",
+		"karma-jasmine"              : "~0.3.5",
+		"karma-ng-scenario"          : "~0.0.2",
+		"karma"                      : "~0.9.8",
+		"karma-phantomjs-launcher"   : "~0.1.4",
+		"karma-requirejs"            : "~0.2.2",
+		"karma-script-launcher"      : "~0.1.0"
+	}
+}

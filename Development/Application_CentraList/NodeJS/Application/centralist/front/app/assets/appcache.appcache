@@ -1,0 +1,24 @@
+CACHE MANIFEST
+# 443fd522eec1dfb158b20b5f2dafd55f9aff6b21
+
+NETWORK:
+*
+
+FALLBACK:
+
+
+CACHE:
+/cache.manifest
+/css/app.css
+/favicon.ico
+/fonts/glyphicons-halflings-regular.eot
+/fonts/glyphicons-halflings-regular.svg
+/fonts/glyphicons-halflings-regular.ttf
+/fonts/glyphicons-halflings-regular.woff
+/index.html
+/index_cached.html
+/js/app.js
+/js/dontUseMe
+/js/vendor.js
+/js/views.js
+/views/userCreate.html

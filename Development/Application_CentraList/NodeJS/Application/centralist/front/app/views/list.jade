@@ -1,0 +1,129 @@
+div.container.listing-list(ng-show="list")
+  div.well.well-sm
+    h1
+      div {{ list.name }}
+        div.btn-group.pull-right(ng-show="list.isModerator || auth.user.isAdmin")
+          a.btn(href, ng-click="toggleSearch()", ng-class="displaySearch ? 'btn-success' : 'btn-default'", tooltip-placement="bottom", tooltip="Rechercher dans la liste")
+            span.glyphicon.glyphicon-search
+          a.btn.btn-default(href="#/lists/{{ list.id }}/edit", tooltip-placement="bottom", tooltip="Modifier les paramètres")
+            span.glyphicon.glyphicon-cog
+          a.btn(href, ng-click="toggleStats()", ng-class="stats ? 'btn-success' : 'btn-default'", tooltip-placement="bottom", tooltip="Afficher les statistiques")
+            span.glyphicon.glyphicon-stats
+          a.btn.btn-default(href, ng-click="export()", tooltip-placement="bottom", tooltip="Exporter le contenu")
+            span.glyphicon.glyphicon-open
+          a.btn.btn-default(href, ng-click="emails()", tooltip-placement="bottom", tooltip="Récupérer les mails")
+            span.glyphicon.glyphicon-envelope
+        div.pull-right.col-md-3.has-success(ng-show="displaySearch")
+          input.form-control.listing-search(ng-model="search")
+
+    ul.list-inline
+      li
+        span.label(class="label-{{ list.$type.bsType }}", tooltip="{{ list.$type.tooltip }}") {{ list.$type.label }}
+      li(ng-show="list.isLinked")
+        span.label.label-success(tooltip="Vous êtes inscrits à cette liste") Inscrit
+      li(ng-show="list.isModerator")
+        span.label.label-success(tooltip="Vous êtes modérateur") Modérateur
+      li(ng-show="list.isOffline")
+        span.label.label-default(tooltip="Accessible et modifiable hors-connexion") Hors Connexion
+      li(ng-show="!list.isModerator && auth.user.isAdmin")
+        span.label.label-danger(tooltip="Vous n'êtes pas modérateur") Admin
+      li.list-desc {{ list.desc }}
+        span(ng-show="list.isModerator || auth.user.isAdmin || list.$type.publicContent") , {{links.length}} inscrits
+  div.clearfix
+  div.row.listing-scrollfix-prepare
+    div.col-md-4.col-lg-3(ng-show="list.isModerator || auth.user.isAdmin || list.$type.publicContent")
+      form.well.well-sm.form-horizontal.listing-form(name="form", ng-submit="submit()", ui-scrollfix="132")
+        legend {{ newLink._id ? 'Modifier' : 'Ajouter une personne' }}
+        div.form-group
+          div.col-sm-12(ng-show="list.isModerator || auth.user.isAdmin")
+            input.form-control(type="text" , id="findUser" , ng-disabled="newLink._id", typeahead-on-select="setUser()", typeahead="user as user.find for user in suggestedUsers | filter:$viewValue | limitTo:8", placeholder="Rechercher", ng-model="findUser")
+        //- Login
+        div.form-group(ng-class="check('user_login') ? 'has-error' : ''")
+          label.col-sm-3.control-label(for="user_login") Login
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_login" , name="user_login", placeholder="Login", ng-readonly="newLink.userId", ng-model="newLink.data.user_login")
+        //- Prénom
+        div.form-group(ng-class="check('user_firstName') ? 'has-error' : ''")
+          label.col-sm-3.control-label(for="user_firstName") Prénom
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_firstName" , name="user_firstName", placeholder="Prénom", ng-readonly="newLink.userId", ng-model="newLink.data.user_firstName", required)
+        //- Nom
+        div.form-group(ng-class="check('user_lastName') ? 'has-error' : ''")
+          label.col-sm-3.control-label(for="user_lastName") Nom
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_lastName" , name="user_lastName", placeholder="Nom", ng-readonly="newLink.userId", ng-model="newLink.data.user_lastName", required)
+        //- E-mail
+        div.form-group(ng-class="check('user_mail') ? 'has-error' : ''", ng-show="list.userFields.mail")
+          label.col-sm-3.control-label(for="user_mail") Mail
+          div.col-sm-9
+            input.form-control.input-sm(type="email", id="user_mail", name="user_mail", placeholder="E-mail", ng-model="newLink.data.user_mail")
+        //- Tèl
+        div.form-group(ng-class="check('user_tel') ? 'has-error' : ''",  ng-show="list.userFields.tel")
+          label.col-sm-3.control-label(for="user_tel") Tèl
+          div.col-sm-9
+            input.form-control.input-sm(type="text", id="user_tel" ,name="user_tel" ,placeholder="__ __ __ __ __", ui-mask="99 99 99 99 99" , ng-model="newLink.data.user_tel" ,ui-mask="99 99 99 99 99")
+        hr
+        //- {{ field.label }}
+        div.form-group(ng-class="check2('#data_'+field.name) ? 'has-error' : ''", ng-repeat="field in list.fields")
+          label.col-sm-3.control-label(for="data_{{ field.name }}") {{ field.label }}
+          div.col-sm-9(ng-if="field.type=='text'")
+            input.form-control.input-sm(type="text", id="data_{{ field.name }}", placeholder="{{ field.label }}", ng-model="newLink.data[field.name]" ,ng-required="field.required")
+          div.col-sm-9.form-control-static(ng-if="field.type=='bool'")
+            label
+              input(type="radio", name="data_{{ field.name }}", ng-model="newLink.data[field.name]", ng-required="field.required", value="Oui")
+              = ' Oui'
+            = ' '
+            label
+              input(type="radio", name="data_{{ field.name }}", ng-model="newLink.data[field.name]", ng-required="field.required", value="Non")
+              = ' Non'
+          div.col-sm-9(ng-if="field.type=='select'")
+            select.form-control.input-sm(ng-options="c for c in field.options", ng-model="newLink.data[field.name]", ng-required="field.required")
+        //- Buttons
+        div.form-group
+          div.col-sm-12.text-right
+            button.btn.btn-danger.pull-left(type="button",ng-click="delete()" ,ng-show="newLink._id")
+              span.glyphicon.glyphicon-trash
+            = ' '
+            button.btn.btn-success.listing-width-1(type="submit",ng-disabled="form.$invalid") {{ newLink._id ? 'Modifier' : 'Ajouter' }}
+            = ' '
+            button.btn.btn-warning(type="button", ng-click="reset()") Annuler
+
+
+    div.col-md-8.col-lg-9(ng-show="list.isModerator || auth.user.isAdmin || list.$type.publicContent")
+      div.well.well-sm(ng-if="stats")
+        table.table
+          thead
+            tr
+              th(ng-repeat="field in stats") {{field.label}}
+                span(ng-show="field.options.length > 10")=' (Top10)'
+          tbody
+            tr
+              td(ng-repeat="field in stats")
+                div(ng-repeat="option in field.options | orderBy:'count':true | limitTo:10") {{option.value}} : {{option.count}}
+
+      alert(ng-repeat="alert in alerts", type="alert.type", ng-animate="'listing-alert'") {{ alert.msg }}
+      div.well.well-sm.table-responsive
+        table.table.table-hover.table-condensed
+          thead
+            tr
+              th
+              th(ng-repeat="field in Lists.userFields", ng-show="list.userFields[field]") {{ Users.labels[field] }}
+              th(ng-repeat="field in list.fields") {{ field.label }}
+          tbody(ng-show="(list.isModerator || auth.user.isAdmin) && queueVisible")
+            tr
+              td.warning(colspan="10") {{ queue.length }} action{{ queue.length != 1 ? 's' : '' }} en attente de synchronisation
+            tr(ng-repeat="link in queue", class="{{ link.$error ? 'danger' : 'warning'}} {{ link.toDelete ? 'listing-toDelete' :'' }}")
+              td
+                a(href, ng-click="removeQueue(link)")
+                  span.glyphicon.glyphicon-trash
+                td(ng-repeat="field in Lists.userFields" ,ng-show="list.userFields[field]") {{ link.data['user_'+field] }}
+                td(ng-repeat="field in list.fields") {{ link.data[field.name] }}
+          tbody
+            tr(ng-repeat="link in displayed | filter:search | limitTo:(maxDisplayed+1) track by link._id", ng-class="{success:link._id == newLink._id, warning : link.action}", ng-dblclick="!(list.isModerator || auth.user.isAdmin) || edit(link)")
+              td
+                a(href, ng-click="edit(link)" ,ng-show="link._id && (list.isModerator || auth.user.isAdmin)", tooltip="Modifier")
+                  span.glyphicon.glyphicon-edit
+              td(ng-repeat="field in Lists.userFields", ng-show="list.userFields[field]") {{ link.data['user_'+field] }}
+              td(ng-repeat="field in list.fields") {{ link.data[field.name] }}
+        p.text-center
+          a.btn.btn-lg.btn-default(href, ng-show="maxDisplayed < links.length && search==''", ng-click="maxDisplayed = maxDisplayed + 50") {{maxDisplayed}} / {{links.length}} - Afficher la suite

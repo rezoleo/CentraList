@@ -1,0 +1,7 @@
+div.modal-header
+  h3 Supprimer une liste
+div.modal-body
+  p Etes-vous sûr de vouloir supprimer la liste {{ list.name }} et tout son contenu ?
+div.modal-footer
+  button.btn.btn-danger(ng-click="instance.close('toto')") Supprimer
+  button.btn.btn-default(ng-click="instance.dismiss()") Annuler

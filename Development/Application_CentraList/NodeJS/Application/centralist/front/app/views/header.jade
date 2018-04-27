@@ -1,0 +1,29 @@
+nav.navbar.navbar-default.navbar-fixed-top(ng-show="auth.user.id")
+  div.container
+    div.navbar-header
+      button.navbar-toggle(type="button", data-toggle="collapse", data-target="#navbar-collapse")
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href="#/home") CentraList
+    div.collapse.navbar-collapse(id="navbar-collapse")
+      ul.nav.navbar-nav
+        li.dropdown
+          a.dropdown-toggle(href="#") Listes modérées
+            b.caret
+          ul.dropdown-menu
+            li.disabled(ng-hide="auth.moderatedLists")
+              a(tabindex="-1", href) Pas de liste
+            li(ng-repeat="list in auth.moderatedLists")
+              a(href="#/lists/{{ list.id }}") {{ list.name }}
+            li.divider
+            li
+              a(href="#/lists/create")
+                span.glyphicon.glyphicon-plus
+                = ' Créer une liste'
+      ul.nav.navbar-nav.navbar-right
+        li
+          a(href="#/user/myaccount") {{ auth.user.firstName }} {{ auth.user.lastName }}
+        li
+          a(href, ng-click="auth.logout()") Déconnexion

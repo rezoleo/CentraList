@@ -1,0 +1,111 @@
+div.container.listing-list(ng-show="list")
+  div.row
+    form.form-horizontal.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8.listing-white-block.well(ng-submit="submit($event)", name="form", novalidate)
+      div.page-header
+        h1(ng-show="list.id") {{ list.name }}
+          div.pull-right
+            a.btn.btn-default.btn-lg(href="#/lists/{{ list.id }}") Retour
+        h1(ng-hide="list.id") Nouvelle liste
+      alert(ng-repeat="alert in alerts", type="alert.type", ng-animate="'listing-alert'") {{ alert.msg }}
+      //- Nom
+      div.form-group(ng-class="{'has-error': check('list_name')}")
+        label.col-sm-4.control-label(for="list_name") Nom
+        div.col-sm-8
+          input.form-control(type="text", id="list_name", name="list_name", placeholder="Nom", ng-model="list.name", required)
+      //- Description
+      div.form-group(ng-class="{'has-error': check('list_desc')}")
+        label.col-sm-4.control-label(for="list_desc") Description
+        div.col-sm-8
+          textarea.form-control(id="list_desc", name="list_desc", placeholder="Description", ng-model="list.desc")
+      //- Catégorie
+      div.form-group(ng-class="{'has-error': check('list_category_type')}")
+        label.col-sm-4.control-label(for="list_category_type") Catégorie
+        div.col-sm-8
+          select.form-control(id="list_category_type",name="list_category_type",ng-options="c.type as c.label for c in Lists.categories",ng-model="list.category.type",required)
+      //- Droits d'accès
+      div.form-group
+        label.col-sm-4.control-label Droits d'accès
+        div.col-sm-8
+          p.btn-group
+            button.btn(type="button", ng-model="list.type", btn-radio="0", ng-class="list.type == 0 ? 'btn-success' : 'btn-default'") Ouverte
+            //button.btn(type="button", ng-model="list.type", btn-radio="1", ng-class="list.type == 1 ? 'btn-warning' : 'btn-default'") Fermée
+            button.btn(type="button", ng-model="list.type", btn-radio="2", ng-class="list.type == 2 ? 'btn-danger' : 'btn-default'") Masquée
+            button.btn(type="button", ng-model="list.type", btn-radio="3", ng-class="list.type == 3 ? 'btn-info' : 'btn-default'") Sondage
+          p
+            strong Ouverte :
+            = ' '
+            | les étudiants peuvent voir la liste et s'y inscrire
+            br
+            //strong Fermée :
+            //= ' '
+            //| les demandes sont validée par un modérateur
+            //br
+            strong Masquée :
+            = ' '
+            | la liste n'est accéssible qu'aux modérateurs
+            br
+            strong Sondage :
+            = ' '
+            | Ouvert à tous, les réponses sont visible par les modérateurs
+      //- Modérateurs
+      div.form-group(ng-class="{'has-error': check('new_mod')}")
+        label.col-sm-4.control-label(for="new_mod") Modérateurs
+        div.col-sm-8
+          p
+            input.form-control(type="text", id="new_mod", name="new_mod", placeholder="Ajouter un modérateur", ng-model="new.mod", typeahead-on-select="addMod()", typeahead="user as user.firstName+' '+user.lastName+' ['+user.login+']' for user in users | filter:$viewValue | limitTo:8")
+            div(ng-repeat="mod in moderators")
+              a.glyphicon.glyphicon-trash(href, ng-click="remove(mod, moderators)")
+              = ' {{ mod.firstName }} {{ mod.lastName }} [{{ mod.login }}]'
+      //- Champs Utilisateur
+      div.form-group
+        label.col-sm-4.control-label Champs utilisateur
+        div.col-sm-4
+          div.checkbox
+            label
+              input(type="checkbox", value="", ng-model="list.userFields.firstName")
+              | Prénom
+          div.checkbox
+            label
+              input(type="checkbox", value="", ng-model="list.userFields.lastName")
+              | Nom
+        div.col-sm-4
+          div.checkbox
+            label
+              input(type="checkbox", value="", ng-model="list.userFields.login")
+              | Login
+          div.checkbox
+            label
+              input(type="checkbox", value="", ng-model="list.userFields.mail")
+              | E-mail
+          div.checkbox
+            label
+              input(type="checkbox", value="", ng-model="list.userFields.tel")
+              | Téléphone
+      //- Champs
+      div.form-group
+        label.col-sm-4.control-label Champs personnalisés
+        div.col-sm-8
+          div.input-group(ng-repeat-start="field in list.fields")
+            div.input-group-btn
+              button.btn.btn-default.dropdown-toggle {{Lists.fieldTypes[field.type].label}}
+                = ' '
+                span.caret
+              ul.dropdown-menu
+                li(ng-repeat="(name, type) in Lists.fieldTypes")
+                  a(href, ng-click="field.type = name") {{type.label}}
+            input.form-control(placeholder="Label", ng-model="field.label")
+            span.input-group-btn
+              button.btn.btn-default(ng-click="remove(field, list.fields)")
+                span.glyphicon.glyphicon-trash
+          div(ng-repeat-end, ng-show="Lists.fieldTypes[field.type].options")
+            textarea.form-control(placeholder="Options séparées par une virgule (,)", ng-model="field.options", ng-list)
+          div.form-control-static
+            a(href, ng-click="addField()") Ajouter un champ personnalisé
+      div.form-group
+        div.col-sm-offset-4.col-sm-8
+          button.btn.btn-primary.btn-lg(type="submit", ng-disabled="form.$invalid") {{ list.id ? 'Modifier' : 'Créer une liste' }}
+          = ' '
+          button.btn.btn-default.btn-lg(type="button", ng-click="reset()") Restaurer
+          = ' '
+          button.btn.btn-danger.btn-lg(type="button", ng-click="delete()", ng-show="list.id")
+            span.glyphicon.glyphicon-trash

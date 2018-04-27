@@ -1,0 +1,9 @@
+div.modal-header
+  h3 Récupérer les e-mails
+div.modal-body
+  label
+    input(type="checkbox" , ng-model="withNames" ,ng-change="update()")
+    | Ajouter les noms des personnes
+  textarea.form-control.listEmails(ng-model="emails", rows="7", readonly, onclick="$(this).select();")
+div.modal-footer
+  button.btn.btn-primary(ng-click="instance.close()") Fermer

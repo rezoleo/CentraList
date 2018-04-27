@@ -1,0 +1,10 @@
+Package: Tool-CentralistSynchronizer
+Version: 1.0.0
+Section: base
+Priority: optional
+Architecture: all
+Depends: Application-Centralist
+Maintainer: Emmanuel ZIDEL-CAUFFET <emmanuel.zidel@gmail.com>
+Description: Tool designed to synchronize information between  CentraList application and the project Zer0 API providing student information
+Homepage: 
+

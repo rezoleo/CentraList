@@ -1,0 +1,33 @@
+@import "_variables";
+
+.listing-list {
+  button[btn-radio] {
+    width: 90px;
+  }
+
+  .listing-toDelete {
+    text-decoration: line-through;
+  }
+
+  .listing-width-1 {
+    width: 90px;
+  }
+
+  .listing-scrollfix-prepare {
+    min-height: 550px;
+  }
+
+  .ui-scrollfix {
+    // For mobiles
+    position: static;
+
+    @media screen and (min-width: @screen-md) {
+        position: fixed;
+        top: 70px;
+        width: 295px;
+    }
+    @media screen and (min-width: @screen-lg) {
+        width: 266px;
+    }
+  }
+}

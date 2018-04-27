@@ -1,0 +1,78 @@
+div.container.listing-home
+  div.row
+    div.col-sm-6.col-md-4.col-lg-3
+      div.well.well-sm.listing-block
+        legend Mes informations
+          = ' '
+          a.close.glyphicon.glyphicon-edit(href="#/user/myaccount")
+        dl
+          dt Prénom :
+          dd {{ user.firstName }}
+          dt Nom :
+          dd {{ user.lastName }}
+          dt E-mail :
+          dd {{ user.mail }}
+          dt Téléphone :
+          dd {{ user.tel }}
+    div.col-sm-6.col-md-4.col-lg-3
+      div.well.well-sm.listing-block
+        legend Listes Modérées
+          = ' '
+          a.close.glyphicon.glyphicon-plus(href="#/lists/create")
+        ul.list-unstyled
+          li(ng-repeat="list in auth.moderatedLists")
+            a.glyphicon.glyphicon-edit(href="#/lists/{{ list.id }}/edit")
+            = ' '
+            a(href="#/lists/{{ list.id }}", tooltip="{{ list.desc }}") {{ list.name }}
+            = ' '
+            div.label.label-default(tooltip="Disponible hors-connexion") HC
+        a(href="#/lists/create")
+          span.glyphicon.glyphicon-plus
+          = ' Créer une liste'
+    div.col-sm-6.col-md-4.col-lg-3
+      div.well.well-sm.listing-block
+        legend Mes listes
+        ul.list-unstyled
+          li(ng-repeat="list in subscribedLists")
+            span.glyphicon(class="glyphicon-{{Lists.types[list.type].icon}}")
+            = ' '
+            a(href="#/lists/{{ list.id }}",tooltip="{{ list.desc }}") {{ list.name }}
+    div.col-sm-6.col-md-4.col-lg-3
+      div.well.well-sm.listing-block
+        legend Associations
+        ul.list-unstyled
+          li(ng-repeat="list in visibleLists.associations")
+            span.glyphicon(class="glyphicon-{{Lists.types[list.type].icon}}")
+            = ' '
+            a(href="#/lists/{{ list.id }}", tooltip="{{ list.desc }}") {{ list.name }}
+    div.col-sm-6.col-md-4.col-lg-3
+      div.well.well-sm.listing-block
+        legend Clubs
+        ul.list-unstyled
+          li(ng-repeat="list in visibleLists.clubs")
+            span.glyphicon(class="glyphicon-{{Lists.types[list.type].icon}}")
+            = ' '
+            a(href="#/lists/{{ list.id }}", tooltip="{{ list.desc }}") {{ list.name }}
+    div.col-sm-6.col-md-4.col-lg-3
+      div.well.well-sm.listing-block
+        legend Autres listes
+        ul.list-unstyled
+          li(ng-repeat="list in visibleLists.others")
+            span.glyphicon(class="glyphicon-{{Lists.types[list.type].icon}}")
+            = ' '
+            a(href="#/lists/{{ list.id }}", tooltip="{{ list.desc }}") {{ list.name }}
+    div.col-sm-offset-1.col-sm-10.col-md-offset-0.col-md-8.col-lg-6.clearfix
+      div.well.well-sm.listing-block
+        legend Fonctionnalités
+        ul
+          li Inscription très rapide de personnes dans des listes
+          li Simple d'utilisation et intuitif
+          li Synchronisation automatique des informations
+          li Interface adaptée aux smartphones
+          li Gestion des paramètres de listes et des droits d'accès
+          li Exports au format csv compatible avec les tableurs Excel
+          li Exports des e-mails pour un envoi groupé rapide
+        = 'N\'hésites pas à nous contacter par e-mail : '
+        a(href="mailto:emmanuel.zidel@gmail.com") Emmanuel
+        = ', '
+        a(href="mailto:shogi31@gmail.com") Hugo

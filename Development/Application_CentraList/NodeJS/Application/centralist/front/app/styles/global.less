@@ -1,0 +1,55 @@
+@import "_variables.less";
+
+// Common
+body {
+  padding-top: 80px;
+}
+
+.well {
+  .page-header {
+    margin-top: 0;
+    border-bottom: 2px solid #FFFFFF;
+  }
+
+  h1 {
+    margin-top:0;
+  }
+
+  legend {
+    border-bottom: 2px solid #fff;
+  }
+
+  hr {
+    border-top: 2px solid #fff;
+  }
+
+  .table > tbody > tr > td {
+    border-top: 1px solid #fff;
+  }
+
+  .table > thead > tr > th {
+    border-bottom: 2px solid #fff;
+  }
+
+  &.listing-panels {
+    margin-bottom: 4px;
+  }
+}
+
+.panel-group a span {
+  cursor: pointer;
+}
+
+.navbar-fixed-top {
+  opacity: 0.9;
+  .transition(opacity 0.3s);
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.btn-group {
+  div + a {
+    margin-left: -1px;
+  }
+}
